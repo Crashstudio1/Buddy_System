@@ -2,7 +2,7 @@
 from collections import defaultdict
 
 class BuddySystem:
-    def __init__(self, total_memory):
+    def __init__(self, total_memory):                                           #initialize the memory size 2 to the power size
         if total_memory & (total_memory - 1) != 0:
             raise ValueError("Total memory size must be a power of 2.")
 
@@ -11,13 +11,14 @@ class BuddySystem:
         self.free_blocks[total_memory].append(0)
         self.allocated_blocks = {}
 
+#allocate the processs
     def allocate(self, size):
         if size <= 0:
-            raise ValueError("Requested size must be greater than 0.")
+            raise ValueError("Requested size must be greater than 0.")               #check the process size
         block_size = 1
         while block_size < size:
             block_size *= 2
-        for available_size in sorted(self.free_blocks.keys()):
+        for available_size in sorted(self.free_blocks.keys()):                      #check is there any available size
             if available_size >= block_size and self.free_blocks[available_size]:
                 address = self.free_blocks[available_size].pop(0)
                 while available_size > block_size:
@@ -28,6 +29,7 @@ class BuddySystem:
                 return address, block_size
         raise MemoryError("Insufficient memory to allocate block.")
 
+# Deallocate the process
     def deallocate(self, address, size):
         if size <= 0 or size & (size - 1) != 0:
             raise ValueError("Block size must be a power of 2.")
@@ -45,7 +47,7 @@ class BuddySystem:
                 break
         self.free_blocks[block_size].append(address)
 
-    def display_memory(self):
+    def display_memory(self):                                                       # Display the current memory state
         print("Current Memory State:")
         for size in sorted(self.free_blocks.keys(), reverse=True):
             for addr in self.free_blocks[size]:
@@ -54,7 +56,7 @@ class BuddySystem:
             print(f"1 block of {size} KB (allocated at address {addr})")
 
     def display_allocation_table(self):
-        print("\nAllocation Table:")
+        print("\nAllocation Table:")                                                #display the Allocation table
         print("+--------------------+----------------+")
         print("| Allocated Address  | Block Size (KB)|")
         print("+--------------------+----------------+")
@@ -62,7 +64,7 @@ class BuddySystem:
             print(f"| {addr:<18} | {size:<14} |")
         print("+--------------------+----------------+")
 
-# Simulator Entry Point - Main Function
+                                                                                    # Simulator Entry Point - Main Function
 if __name__ == "__main__":
     print("Welcome to the Buddy System Memory Allocation Simulator")
 
